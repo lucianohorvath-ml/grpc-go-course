@@ -16,31 +16,18 @@ import (
 )
 
 func main() {
+	fmt.Println("Hello world, I am the client")
 
-	fmt.Println("Hello I'm a client")
-
-	tls := false
-	opts := grpc.WithInsecure()
-	if tls {
-		certFile := "ssl/ca.crt" // Certificate Authority Trust certificate
-		creds, sslErr := credentials.NewClientTLSFromFile(certFile, "")
-		if sslErr != nil {
-			log.Fatalf("Error while loading CA trust certificate: %v", sslErr)
-			return
-		}
-		opts = grpc.WithTransportCredentials(creds)
-	}
-
-	cc, err := grpc.Dial("localhost:50051", opts)
+	cc, err := grpc.Dial("localhost:50051", getTLSDialOption())
 	if err != nil {
 		log.Fatalf("could not connect: %v", err)
 	}
 	defer cc.Close()
 
 	c := greetpb.NewGreetServiceClient(cc)
-	// fmt.Printf("Created client: %f", c)
+	fmt.Printf("Client created: %f", c)
 
-	doUnary(c)
+	doUnaryRequest(c)
 	// doServerStreaming(c)
 	// doClientStreaming(c)
 	// doBiDiStreaming(c)
@@ -49,18 +36,36 @@ func main() {
 	// doUnaryWithDeadline(c, 1*time.Second) // should timeout
 }
 
-func doUnary(c greetpb.GreetServiceClient) {
+func getTLSDialOption() grpc.DialOption {
+	// If you don't want to use TLS, use the following DialOption.
+	// opts := insecure.NewCredentials()
+
+	certFile := "ssl/ca.crt" // Certificate Authority Trust certificate
+	creds, err := credentials.NewClientTLSFromFile(certFile, "")
+	if err != nil {
+		log.Fatalf("Error loading CA trust certificate: %v", err)
+		return nil
+	}
+
+	return grpc.WithTransportCredentials(creds)
+}
+
+func doUnaryRequest(c greetpb.GreetServiceClient) {
 	fmt.Println("Starting to do a Unary RPC...")
+
 	req := &greetpb.GreetRequest{
 		Greeting: &greetpb.Greeting{
-			FirstName: "Stephane",
-			LastName:  "Maarek",
+			FirstName: "Luciano",
+			LastName:  "Horvath",
 		},
 	}
+
+	// Greet is defined in the auto-generated GreetServiceClient interface.
 	res, err := c.Greet(context.Background(), req)
 	if err != nil {
-		log.Fatalf("error while calling Greet RPC: %v", err)
+		log.Fatalf("Error calling Greet RPC: %v", err)
 	}
+
 	log.Printf("Response from Greet: %v", res.Result)
 }
 
@@ -215,18 +220,19 @@ func doBiDiStreaming(c greetpb.GreetServiceClient) {
 
 func doUnaryWithDeadline(c greetpb.GreetServiceClient, timeout time.Duration) {
 	fmt.Println("Starting to do a UnaryWithDeadline RPC...")
+
 	req := &greetpb.GreetWithDeadlineRequest{
 		Greeting: &greetpb.Greeting{
-			FirstName: "Stephane",
-			LastName:  "Maarek",
+			FirstName: "Luciano",
+			LastName:  "Horvath",
 		},
 	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	res, err := c.GreetWithDeadline(ctx, req)
 	if err != nil {
-
 		statusErr, ok := status.FromError(err)
 		if ok {
 			if statusErr.Code() == codes.DeadlineExceeded {
@@ -237,7 +243,9 @@ func doUnaryWithDeadline(c greetpb.GreetServiceClient, timeout time.Duration) {
 		} else {
 			log.Fatalf("error while calling GreetWithDeadline RPC: %v", err)
 		}
+
 		return
 	}
+
 	log.Printf("Response from GreetWithDeadline: %v", res.Result)
 }

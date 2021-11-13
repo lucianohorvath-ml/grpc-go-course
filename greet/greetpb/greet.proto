@@ -1,17 +1,25 @@
 syntax = "proto3";
 
 package greet;
-option go_package="greetpb";
+option go_package="greetpb"; // Name of the Go pkg that will be auto-generated
 
+// This is a comment.
+
+/* And this
+   is also a comment. */
+
+// Greeting is our message. It contains two string fields.
 message Greeting {
-    string first_name = 1;
+    string first_name = 1; // 1 is the "field number"
     string last_name = 2;
 }
 
+// Client request. GreetRequest contains a Greeting.
 message GreetRequest {
     Greeting greeting = 1;
 }
 
+// Server response. GreetResponse contains a string called result.
 message GreetResponse {
     string result = 1;
 }
@@ -63,5 +71,4 @@ service GreetService{
 
     // Unary With Deadline
     rpc GreetWithDeadline(GreetWithDeadlineRequest) returns (GreetWithDeadlineResponse) {};
-
 }
