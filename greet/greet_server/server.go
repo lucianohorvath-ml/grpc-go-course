@@ -9,11 +9,10 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/lucianohorvath-ml/grpc-go-course/greet/greetpb"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
-
-	"github.com/simplesteph/grpc-go-course/greet/greetpb"
 
 	"google.golang.org/grpc"
 )
