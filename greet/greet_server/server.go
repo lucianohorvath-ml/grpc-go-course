@@ -37,7 +37,7 @@ func main() {
 // server implements GreetService (the gRPC service) functions defined in greet.proto.
 // The auto-generated interface is called GreetServiceClient.
 type server struct {
-	greetpb.UnimplementedGreetServiceServer
+	greetpb.UnimplementedGreetServiceServer // for forward compatibility reasons
 }
 
 func getTLSServerOption() grpc.ServerOption {

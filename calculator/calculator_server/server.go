@@ -15,16 +15,39 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-type server struct{}
+func main() {
+	fmt.Println("Starting calculator server...")
+
+	lis, err := net.Listen("tcp", "0.0.0.0:50051")
+	if err != nil {
+		log.Fatalf("Failed to listen: %v", err)
+	}
+
+	s := grpc.NewServer()
+	calculatorpb.RegisterCalculatorServiceServer(s, &server{})
+
+	// Register reflection service on gRPC server.
+	reflection.Register(s)
+
+	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+}
+
+type server struct {
+	calculatorpb.UnimplementedCalculatorServiceServer
+}
 
 func (*server) Sum(ctx context.Context, req *calculatorpb.SumRequest) (*calculatorpb.SumResponse, error) {
-	fmt.Printf("Received Sum RPC: %v\n", req)
+	log.Printf("Received Sum RPC: %v\n", req)
+
 	firstNumber := req.FirstNumber
 	secondNumber := req.SecondNumber
-	sum := firstNumber + secondNumber
+
 	res := &calculatorpb.SumResponse{
-		SumResult: sum,
+		SumResult: firstNumber + secondNumber,
 	}
+
 	return res, nil
 }
 
@@ -45,6 +68,7 @@ func (*server) PrimeNumberDecomposition(req *calculatorpb.PrimeNumberDecompositi
 			fmt.Printf("Divisor has increased to %v\n", divisor)
 		}
 	}
+
 	return nil
 }
 
@@ -100,6 +124,7 @@ func (*server) FindMaximum(stream calculatorpb.CalculatorService_FindMaximumServ
 
 func (*server) SquareRoot(ctx context.Context, req *calculatorpb.SquareRootRequest) (*calculatorpb.SquareRootResponse, error) {
 	fmt.Println("Received SquareRoot RPC")
+
 	number := req.GetNumber()
 	if number < 0 {
 		return nil, status.Errorf(
@@ -107,26 +132,8 @@ func (*server) SquareRoot(ctx context.Context, req *calculatorpb.SquareRootReque
 			fmt.Sprintf("Received a negative number: %v", number),
 		)
 	}
+
 	return &calculatorpb.SquareRootResponse{
 		NumberRoot: math.Sqrt(float64(number)),
 	}, nil
-}
-
-func main() {
-	fmt.Println("Calculator Server")
-
-	lis, err := net.Listen("tcp", "0.0.0.0:50051")
-	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
-	}
-
-	s := grpc.NewServer()
-	calculatorpb.RegisterCalculatorServiceServer(s, &server{})
-
-	// Register reflection service on gRPC server.
-	reflection.Register(s)
-
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
 }
