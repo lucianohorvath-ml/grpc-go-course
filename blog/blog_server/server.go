@@ -8,18 +8,15 @@ import (
 	"os"
 	"os/signal"
 
-	"gopkg.in/mgo.v2/bson"
-
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/reflection"
-	"google.golang.org/grpc/status"
-
+	"github.com/lucianohorvath-ml/grpc-go-course/blog/blogpb"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-
-	"github.com/simplesteph/grpc-go-course/blog/blogpb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var collection *mongo.Collection

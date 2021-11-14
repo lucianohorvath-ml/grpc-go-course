@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package greet;
-option go_package="greetpb"; // Name of the Go pkg that will be auto-generated
+option go_package="greet/greetpb"; // Name of the Go pkg that will be auto-generated
 
 // This is a comment.
 

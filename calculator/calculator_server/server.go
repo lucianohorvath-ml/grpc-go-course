@@ -8,13 +8,11 @@ import (
 	"math"
 	"net"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
-	"github.com/simplesteph/grpc-go-course/calculator/calculatorpb"
-	"google.golang.org/grpc/reflection"
-
+	"github.com/lucianohorvath-ml/grpc-go-course/calculator/calculatorpb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
 type server struct{}

@@ -10,11 +10,10 @@ import (
 	"time"
 
 	"github.com/lucianohorvath-ml/grpc-go-course/greet/greetpb"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/status"
-
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -37,7 +36,9 @@ func main() {
 
 // server implements GreetService (the gRPC service) functions defined in greet.proto.
 // The auto-generated interface is called GreetServiceClient.
-type server struct{}
+type server struct {
+	greetpb.UnimplementedGreetServiceServer
+}
 
 func getTLSServerOption() grpc.ServerOption {
 	var opt grpc.ServerOption
