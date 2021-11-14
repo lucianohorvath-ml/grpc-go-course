@@ -35,6 +35,7 @@ func main() {
 	// doUnaryWithDeadline(c, 1*time.Second) // should timeout
 }
 
+// getTLSDialOption returns an optional TLS configuration.
 func getTLSDialOption() grpc.DialOption {
 	// If you don't want to use TLS, use the following DialOption.
 	// opts := insecure.NewCredentials()
