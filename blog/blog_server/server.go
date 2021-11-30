@@ -19,20 +19,9 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var collection *mongo.Collection
-
-type server struct {
-	blogpb.BlogServiceServer
-}
-
-type blogItem struct {
-	ID       primitive.ObjectID `bson:"_id,omitempty"`
-	AuthorID string             `bson:"author_id"`
-	Content  string             `bson:"content"`
-	Title    string             `bson:"title"`
-}
-
 func main() {
+	fmt.Println("Starting blog server...")
+
 	// if we crash the go code, we get the file name and line number
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 
@@ -84,6 +73,19 @@ func main() {
 	fmt.Println("Stopping the server")
 	s.Stop()
 	fmt.Println("End of Program")
+}
+
+var collection *mongo.Collection
+
+type server struct {
+	blogpb.BlogServiceServer
+}
+
+type blogItem struct {
+	ID       primitive.ObjectID `bson:"_id,omitempty"`
+	AuthorID string             `bson:"author_id"`
+	Content  string             `bson:"content"`
+	Title    string             `bson:"title"`
 }
 
 func (*server) CreateBlog(ctx context.Context, req *blogpb.CreateBlogRequest) (*blogpb.CreateBlogResponse, error) {

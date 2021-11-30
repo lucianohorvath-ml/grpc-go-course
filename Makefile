@@ -2,7 +2,7 @@
 GOTOOLS_CHECK = go goverreport
 export GO111MODULE=on
 
-all: check_tools fmt test linter
+all: check_tools fmt test
 
 ### Tools & dependencies
 check_tools:
@@ -37,7 +37,15 @@ run-client-calc:
 	@echo "==> Running gRPC client (calculator)..."
 	cd calculator && go run calculator_client/client.go
 
+run-server-blog:
+	@echo "==> Running gRPC server (blog)..."
+	cd blog && go run blog_server/server.go
+
+run-client-blog:
+	@echo "==> Running gRPC client (blog)..."
+	cd blog && go run blog_client/client.go
+
 # To avoid unintended conflicts with file names, always add to .PHONY
 # unless there is a reason not to.
 # https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html
-.PHONY: all check_tools test test-cover fmt linter go-modules-init-12 go-modules-tidy-12 run-api
+.PHONY: all check_tools test fmt run-server run-client run-server-calc run-client-calc run-server-blog run-client-blog

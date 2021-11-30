@@ -26,7 +26,7 @@ func main() {
 	s := grpc.NewServer()
 	calculatorpb.RegisterCalculatorServiceServer(s, &server{})
 
-	// Register reflection service on gRPC server.
+	// Register reflection service on gRPC server (a.k.a. "Server Reflection").
 	reflection.Register(s)
 
 	if err := s.Serve(lis); err != nil {
@@ -51,7 +51,7 @@ func (*server) Sum(ctx context.Context, req *calculatorpb.SumRequest) (*calculat
 	return res, nil
 }
 
-func (*server) PrimeNumberDecomposition(req *calculatorpb.PrimeNumberDecompositionRequest, stream calculatorpb.CalculatorService_PrimeNumberDecompositionServer) error {
+func (s *server) PrimeNumberDecomposition(req *calculatorpb.PrimeNumberDecompositionRequest, stream calculatorpb.CalculatorService_PrimeNumberDecompositionServer) error {
 	fmt.Printf("Received PrimeNumberDecomposition RPC: %v\n", req)
 
 	number := req.GetNumber()
@@ -72,48 +72,57 @@ func (*server) PrimeNumberDecomposition(req *calculatorpb.PrimeNumberDecompositi
 	return nil
 }
 
-func (*server) ComputeAverage(stream calculatorpb.CalculatorService_ComputeAverageServer) error {
-	fmt.Printf("Received ComputeAverage RPC\n")
+func (s *server) ComputeAverage(stream calculatorpb.CalculatorService_ComputeAverageServer) error {
+	fmt.Printf("Received ComputeAverage RPC (stream)\n")
 
-	sum := int32(0)
-	count := 0
+	var sum, count int32 = 0, 0
 
 	for {
+		// Leo un request
 		req, err := stream.Recv()
+
 		if err == io.EOF {
+			// EOF ==> El cliente terminó de enviar requests. Calculemos el promedio y retornemos.
 			average := float64(sum) / float64(count)
 			return stream.SendAndClose(&calculatorpb.ComputeAverageResponse{
 				Average: average,
 			})
 		}
+
 		if err != nil {
 			log.Fatalf("Error while reading client stream: %v", err)
 		}
+
 		sum += req.GetNumber()
 		count++
 	}
-
 }
 
-func (*server) FindMaximum(stream calculatorpb.CalculatorService_FindMaximumServer) error {
-	fmt.Println("Received FindMaximum RPC")
-	maximum := int32(0)
+func (s *server) FindMaximum(stream calculatorpb.CalculatorService_FindMaximumServer) error {
+	fmt.Println("Received FindMaximum RPC (stream)")
+	var maximum int32 = 0
 
 	for {
+		// Leo el request
 		req, err := stream.Recv()
 		if err == io.EOF {
+			// EOF ==> El cliente terminó de enviar requests.
 			return nil
 		}
+
 		if err != nil {
 			log.Fatalf("Error while reading client stream: %v", err)
 			return err
 		}
+
 		number := req.GetNumber()
 		if number > maximum {
+			// Nuevo máximo encontrado, lo retorno inmediatamente y sigo escuchando.
 			maximum = number
 			sendErr := stream.Send(&calculatorpb.FindMaximumResponse{
 				Maximum: maximum,
 			})
+
 			if sendErr != nil {
 				log.Fatalf("Error while sending data to client: %v", sendErr)
 				return sendErr
@@ -122,11 +131,13 @@ func (*server) FindMaximum(stream calculatorpb.CalculatorService_FindMaximumServ
 	}
 }
 
-func (*server) SquareRoot(ctx context.Context, req *calculatorpb.SquareRootRequest) (*calculatorpb.SquareRootResponse, error) {
-	fmt.Println("Received SquareRoot RPC")
+func (s *server) SquareRoot(ctx context.Context, req *calculatorpb.SquareRootRequest) (*calculatorpb.SquareRootResponse, error) {
+	log.Printf("Received SquareRoot RPC: %v\n", req)
 
 	number := req.GetNumber()
 	if number < 0 {
+		log.Printf("Error: negative number!")
+
 		return nil, status.Errorf(
 			codes.InvalidArgument,
 			fmt.Sprintf("Received a negative number: %v", number),

@@ -11,25 +11,22 @@ import (
 )
 
 func main() {
+	fmt.Println("Starting blog client...")
 
-	fmt.Println("Blog Client")
-
-	opts := grpc.WithInsecure()
-
-	cc, err := grpc.Dial("localhost:50051", opts)
+	cc, err := grpc.Dial("localhost:50051", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("could not connect: %v", err)
 	}
-	defer cc.Close() // Maybe this should be in a separate function and the error handled?
+	defer cc.Close()
 
 	c := blogpb.NewBlogServiceClient(cc)
 
 	// create Blog
 	fmt.Println("Creating the blog")
 	blog := &blogpb.Blog{
-		AuthorId: "Stephane",
-		Title:    "My First Blog",
-		Content:  "Content of the first blog",
+		AuthorId: "Dross",
+		Title:    "El Diario de Dross",
+		Content:  "Mi primer post habla de... bla bla bla...",
 	}
 	createBlogRes, err := c.CreateBlog(context.Background(), &blogpb.CreateBlogRequest{Blog: blog})
 	if err != nil {
@@ -57,9 +54,9 @@ func main() {
 	// update Blog
 	newBlog := &blogpb.Blog{
 		Id:       blogID,
-		AuthorId: "Changed Author",
-		Title:    "My First Blog (edited)",
-		Content:  "Content of the first blog, with some awesome additions!",
+		AuthorId: "Super Dross",
+		Title:    "El Diario de Dross (v2)",
+		Content:  "Mi primer post habla de... bla bla bla... y aún más bla bla bla que antes!",
 	}
 	updateRes, updateErr := c.UpdateBlog(context.Background(), &blogpb.UpdateBlogRequest{Blog: newBlog})
 	if updateErr != nil {
