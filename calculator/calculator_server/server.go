@@ -52,20 +52,22 @@ func (*server) Sum(ctx context.Context, req *calculatorpb.SumRequest) (*calculat
 }
 
 func (s *server) PrimeNumberDecomposition(req *calculatorpb.PrimeNumberDecompositionRequest, stream calculatorpb.CalculatorService_PrimeNumberDecompositionServer) error {
-	fmt.Printf("Received PrimeNumberDecomposition RPC: %v\n", req)
+	log.Printf("Received PrimeNumberDecomposition RPC: %v\n", req)
 
 	number := req.GetNumber()
-	divisor := int64(2)
+	var divisor = int64(2)
 
 	for number > 1 {
 		if number%divisor == 0 {
-			stream.Send(&calculatorpb.PrimeNumberDecompositionResponse{
+			log.Printf("[server streaming] send divisor: %v\n", divisor)
+
+			_ = stream.Send(&calculatorpb.PrimeNumberDecompositionResponse{
 				PrimeFactor: divisor,
 			})
 			number = number / divisor
 		} else {
 			divisor++
-			fmt.Printf("Divisor has increased to %v\n", divisor)
+			log.Printf("Divisor has increased to %v\n", divisor)
 		}
 	}
 
