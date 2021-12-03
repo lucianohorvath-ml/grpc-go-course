@@ -1,0 +1,12 @@
+{
+  "details": {
+    "methodFqn": "calculator.CalculatorService.PrimeNumberDecomposition"
+  },
+  "requests": [
+    {
+      "location": "2 - PrimeNumberDecomp (server streaming)-request.json"
+    }
+  ],
+  "operationType": "serverStreaming",
+  "invokerName": "grpc"
+}

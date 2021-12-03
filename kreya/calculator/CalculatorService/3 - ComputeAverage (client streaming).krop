@@ -1,0 +1,19 @@
+{
+  "details": {
+    "endpoint": "http://localhost:50051",
+    "methodFqn": "calculator.CalculatorService.ComputeAverage"
+  },
+  "requests": [
+    {
+      "location": "3 - ComputeAverage (client streaming)-request-0.json"
+    },
+    {
+      "location": "3 - ComputeAverage (client streaming)-request-1.json"
+    },
+    {
+      "location": "3 - ComputeAverage (client streaming)-request-2.json"
+    }
+  ],
+  "operationType": "clientStreaming",
+  "invokerName": "grpc"
+}

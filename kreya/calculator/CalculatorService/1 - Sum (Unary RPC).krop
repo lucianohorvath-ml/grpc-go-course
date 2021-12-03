@@ -1,0 +1,13 @@
+{
+  "details": {
+    "endpoint": "http://localhost:50051",
+    "methodFqn": "calculator.CalculatorService.Sum"
+  },
+  "requests": [
+    {
+      "location": "1 - Sum (Unary RPC)-request.json"
+    }
+  ],
+  "operationType": "unary",
+  "invokerName": "grpc"
+}

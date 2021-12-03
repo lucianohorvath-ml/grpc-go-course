@@ -1,0 +1,13 @@
+{
+  "details": {
+    "endpoint": "http://localhost:50051",
+    "methodFqn": "calculator.CalculatorService.SquareRoot"
+  },
+  "requests": [
+    {
+      "location": "SquareRoot - Error-request.json"
+    }
+  ],
+  "operationType": "unary",
+  "invokerName": "grpc"
+}
