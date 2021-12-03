@@ -24,7 +24,7 @@ func main() {
 	defer cc.Close()
 
 	c := greetpb.NewGreetServiceClient(cc)
-	fmt.Printf("Client created: %f", c)
+	// fmt.Printf("Client created: %f", c)
 
 	doUnaryRequest(c)
 	// doServerStreaming(c)
@@ -38,7 +38,7 @@ func main() {
 // getTLSDialOption returns an optional TLS configuration.
 func getTLSDialOption() grpc.DialOption {
 	// If you don't want to use TLS, use the following DialOption.
-	// opts := insecure.NewCredentials()
+	return grpc.WithInsecure()
 
 	certFile := "ssl/ca.crt" // Certificate Authority Trust certificate
 	creds, err := credentials.NewClientTLSFromFile(certFile, "")

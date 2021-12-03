@@ -26,7 +26,8 @@ func main() {
 	}
 
 	// TLS is optional.
-	s := grpc.NewServer(getTLSServerOption())
+	// s := grpc.NewServer(getTLSServerOption())
+	s := grpc.NewServer()
 	greetpb.RegisterGreetServiceServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {
