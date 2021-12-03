@@ -39,8 +39,28 @@ make run-server
 
 2. Run the client.
 ```
-make run-server
+make run-client
 ```
+
+### Calculator Service
+
+1. Run the server.
+```
+make run-server-calc
+```
+
+2. Run the client.
+```
+make run-client-calc
+```
+
+This one has several examples of gRPC APIs:
+- Unary RPC: Sum and SquareRoot
+- Client streaming: ComputeAverage
+- Server streaming: PrimeNumberDecomposition
+- Bidirectional streaming: FindMaximum
+
+### Notes
 
 If you modify a `.proto` file, you will need to recreate the generated files:
 ```
