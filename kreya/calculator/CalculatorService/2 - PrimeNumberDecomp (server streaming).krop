@@ -4,7 +4,7 @@
   },
   "requests": [
     {
-      "location": "PrimeNumberDecomposition-request.json"
+      "location": "2 - PrimeNumberDecomp (server streaming)-request.json"
     }
   ],
   "operationType": "serverStreaming",

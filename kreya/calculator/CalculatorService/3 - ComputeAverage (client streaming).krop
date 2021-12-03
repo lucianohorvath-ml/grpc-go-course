@@ -5,13 +5,13 @@
   },
   "requests": [
     {
-      "location": "2 - ComputeAverage (client streaming)-request-0.json"
+      "location": "3 - ComputeAverage (client streaming)-request-0.json"
     },
     {
-      "location": "2 - ComputeAverage (client streaming)-request-1.json"
+      "location": "3 - ComputeAverage (client streaming)-request-1.json"
     },
     {
-      "location": "2 - ComputeAverage (client streaming)-request-2.json"
+      "location": "3 - ComputeAverage (client streaming)-request-2.json"
     }
   ],
   "operationType": "clientStreaming",

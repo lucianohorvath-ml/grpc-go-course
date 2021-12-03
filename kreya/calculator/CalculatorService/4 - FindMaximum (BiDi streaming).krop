@@ -5,13 +5,13 @@
   },
   "requests": [
     {
-      "location": "FindMaximum (BiDi streaming)-request-0.json"
+      "location": "4 - FindMaximum (BiDi streaming)-request-0.json"
     },
     {
-      "location": "FindMaximum (BiDi streaming)-request-1.json"
+      "location": "4 - FindMaximum (BiDi streaming)-request-1.json"
     },
     {
-      "location": "FindMaximum (BiDi streaming)-request-2.json"
+      "location": "4 - FindMaximum (BiDi streaming)-request-2.json"
     }
   ],
   "operationType": "duplexStreaming",
